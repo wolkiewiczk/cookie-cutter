@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookie cutter</title>
+</head>
+<body>
+    <h3>Image cookie cutter</h3>
+    <p>Lekka aplikacja do wycinania kółek z obrazków (jednak weselej nazywać je "ciasteczkami").</p>
+    <form action="/oven" method="post" enctype="multipart/form-data">
+        Promień <input type="number" name="ray" min="1" required>
+        Kolumny <input type="number" name="columns" min="1" max="12" value="3" required>
+        Rzędy <input type="number" name="rows" min="1" max="12" value="3" required>
+        Obrazki <input type="file" name="images" accept="image/jpeg, image/png" multiple required>
+        <input type="submit" value="Submit">
+    </form>
+    <h4>Instrukcja:</h4>
+    <h3>Aplikacja działa w sposób następujący:</h3>
+    <ol>
+        <li>Dzieli obrazek na równą ilość rzędów i kolumn. W przypadku gdy nie da się równo podzielić, ucina resztę.</li>
+        <li>Z powstałych z tego podziału części wybiera losowo jedną z nich.</li>
+        <li>
+            Wybiera losowy punkt na wybranej części. Będzie to środek ciasteczka.
+            Wybrany punkt zostanie wybrany tak, ciasteczko nie wychodziło poza granice płaszczyzny.
+        </li>
+        <li>Wycina ciasteczko o podanym promieniu.</li>
+        <li>
+            Aplikacja wysyła paczkę .zip ze wszystkimi wyciętymi ciasteczkami w formacie .png.
+            Nazwy plików ciasteczek będą takie same jak nazwy oryginalnych plików.
+        </li>
+    </ol>
+    <h3>Objaśnienia pól:</h3>
+    <ul>
+        <li>
+            Promień - długość promienia wycinanego ciasteczka w pikselach. Jeśli podany promień będzie większy niż
+            krótszy wymiar pojedynczego fragmentu obrazka (po podziale na rzędy i kolumny), promień automatycznie
+            przyjmie wartość krótszego wymiaru danego fragmentu.
+        </li>
+        <li>Kolumny - ilość kolumn na które podzielić obrazek.</li>
+        <li>Rzędy - ilość rzędów na które podzielić obrazek.</li>
+        <li>
+            Obrazki - pliki graficzne, z których zostaną wycięte ciasteczka. Dopuszczalne rozszerzenia to .jpg i .png.
+            Można wybrać wiele plików. Przytrzymując ctrl dodajemy pojedyncze pliki do zaznaczenia, zaś trzymanie przycisku
+            shift pozwala zaznaczyć od razu zakres plików. Skrót ctrl+a pozwala zaznaczyć wszystkie pliki w bieżącym folderze.
+            Można także po prostu przeciągać myszką nad obrazkami.
+            Uwaga: przy dużej ilość plików przesłanych na raz (zwłaszcza w dużych rozmiarach) przetwarzanie może trwać
+            nawet kilka minut. W takiej sytuacji nie należy opuszczać strony ani ponownie klikać przycisku submit.
+        </li>
+    </ul>
+</body>
+</html>
