@@ -24,9 +24,10 @@ def create_app():
                 if ext not in ['jpg', 'png']:
                     continue
                 mold = CookieMold(img, rows=int(request.form['rows']), columns=int(request.form['columns']))
-                cookie = BytesIO()
-                mold.cut(int(request.form['ray'])).save(cookie, format='png')
-                cookie_jar.writestr(f'{filename}.png', cookie.getvalue())
+                cookie_wrapping = BytesIO()
+                cookie, x, y = mold.cut(int(request.form['ray']))
+                cookie.save(cookie_wrapping, format='png')
+                cookie_jar.writestr(f'{filename}_cookie_{x}_{y}.png', cookie_wrapping.getvalue())
         zipfile.seek(0)
         return send_file(
             zipfile, mimetype='application/zip', as_attachment=True, attachment_filename='image_cookies.zip'
@@ -35,4 +36,4 @@ def create_app():
     return app
 
 
-app = create_app()
+application = create_app()
