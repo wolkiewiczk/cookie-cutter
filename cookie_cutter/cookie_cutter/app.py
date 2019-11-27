@@ -25,7 +25,13 @@ def create_app():
                     continue
                 mold = CookieMold(img, rows=int(request.form['rows']), columns=int(request.form['columns']))
                 cookie_wrapping = BytesIO()
-                cookie, x, y = mold.cut(int(request.form['ray']))
+                ray = int(request.form['ray']) if request.form['switch'] == 'radius' else mold.calculate_ray(
+                    float(request.form['screen_width_mm']),
+                    int(request.form['screen_width_px']),
+                    float(request.form['distance']),
+                    float(request.form['angle']),
+                )
+                cookie, x, y = mold.cut(ray)
                 cookie.save(cookie_wrapping, format='png')
                 cookie_jar.writestr(f'{filename}_cookie_{x}_{y}.png', cookie_wrapping.getvalue())
         zipfile.seek(0)

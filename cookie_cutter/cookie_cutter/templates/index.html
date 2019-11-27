@@ -1,23 +1,57 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <title>Cookie cutter</title>
 </head>
+
 <body>
     <h3>Image cookie cutter</h3>
     <p>Lekka aplikacja do wycinania kółek z obrazków (jednak weselej nazywać je "ciasteczkami").</p>
-    <form action="/oven" method="post" enctype="multipart/form-data">
-        Promień <input type="number" name="ray" min="1" required>
+
+    <form action="/oven" method="post" enctype="multipart/form-data" id="main">
+        <b>Promień:</b><br>
+        Manualnie<input onclick="validateForm()" value="radius" name="switch" type="radio" checked>
+        Automatycznie<input onclick="validateForm()" value="more-options" name="switch" type="radio">
+        <br>
+        <br>
+        <div id="radius">
+            Promień <input type="number" name="ray" min="1">
+            <br>
+            <br>
+        </div>
+
+        <div id="more-options">
+            Odległość od ekranu (mm) <input type="number" name="distance" min="1" step="any">
+            <br>
+            <br>
+            Szerokość ekranu (mm) <input type="number" name="screen_width_mm" min="1" step="any">
+            <br>
+            <br>
+            Szerokość ekranu (px) <input type="number" name="screen_width_px" min=1>
+            <br>
+            <br>
+            Kąt <input type="number" name="angle" min="0" max="360" step="any">
+            <br>
+            <br>
+        </div>
         Kolumny <input type="number" name="columns" min="1" max="12" value="3" required>
+        <br>
+        <br>
         Rzędy <input type="number" name="rows" min="1" max="12" value="3" required>
+        <br>
+        <br>
         Obrazki <input type="file" name="images" accept="image/jpeg, image/png" multiple required>
+        <br>
+        <br>
         <input type="submit" value="Submit">
     </form>
     <h4>Instrukcja:</h4>
     <h3>Aplikacja działa w sposób następujący:</h3>
     <ol>
-        <li>Dzieli obrazek na równą ilość rzędów i kolumn. W przypadku gdy nie da się równo podzielić, ucina resztę.</li>
+        <li>Dzieli obrazek na równą ilość rzędów i kolumn. W przypadku gdy nie da się równo podzielić, ucina resztę.
+        </li>
         <li>Z powstałych z tego podziału części wybiera losowo jedną z nich.</li>
         <li>
             Wybiera losowy punkt na wybranej części. Będzie to środek ciasteczka.
@@ -40,12 +74,43 @@
         <li>Rzędy - ilość rzędów na które podzielić obrazek.</li>
         <li>
             Obrazki - pliki graficzne, z których zostaną wycięte ciasteczka. Dopuszczalne rozszerzenia to .jpg i .png.
-            Można wybrać wiele plików. Przytrzymując ctrl dodajemy pojedyncze pliki do zaznaczenia, zaś trzymanie przycisku
-            shift pozwala zaznaczyć od razu zakres plików. Skrót ctrl+a pozwala zaznaczyć wszystkie pliki w bieżącym folderze.
+            Można wybrać wiele plików. Przytrzymując ctrl dodajemy pojedyncze pliki do zaznaczenia, zaś trzymanie
+            przycisku
+            shift pozwala zaznaczyć od razu zakres plików. Skrót ctrl+a pozwala zaznaczyć wszystkie pliki w bieżącym
+            folderze.
             Można także po prostu przeciągać myszką nad obrazkami.
             Uwaga: przy dużej ilość plików przesłanych na raz (zwłaszcza w dużych rozmiarach) przetwarzanie może trwać
             nawet kilka minut. W takiej sytuacji nie należy opuszczać strony ani ponownie klikać przycisku submit.
         </li>
     </ul>
+    <script>
+        let radiusSection = document.getElementById('radius');
+        let moreOptionSection = document.getElementById('more-options');
+
+        Array.from(radiusSection.children).map(element => element.required = true);
+
+        moreOptionSection.style.opacity = 0;
+        moreOptionSection.style.display = 'none';
+
+        const validateForm = () => {
+            let option = document.forms['main']['switch'].value;
+            if (option == 'radius') {
+                Array.from(radiusSection.children).map(element => element.required = true);
+                Array.from(moreOptionSection.children).map(element => element.required = false);
+                radiusSection.style.opacity = 1;
+                radiusSection.style.display = 'block';
+                moreOptionSection.style.opacity = 0;
+                moreOptionSection.style.display = 'none';
+            } else {
+                Array.from(moreOptionSection.children).map(element => element.required = true);
+                Array.from(radiusSection.children).map(element => element.required = false);
+                radiusSection.style.opacity = 0;
+                radiusSection.style.display = 'none';
+                moreOptionSection.style.opacity = 1;
+                moreOptionSection.style.display = 'block';
+            }
+        }
+    </script>
 </body>
+
 </html>
